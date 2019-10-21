@@ -1,16 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { threadId } from 'worker_threads';
+import Filter from 'bad-words';
+
+const filter = Filter();
 
 class CreatePost extends Component{
     static propTypes = {
 
     };
 
+    //fetchPosts(){/*where bitch?*/}
+
     constructor(props){
         super(props);
         
         this.state = {
-            content:''
+            content:'',
+            valid: false
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -18,24 +25,40 @@ class CreatePost extends Component{
     }
 
     handlePostChange(event){
-        const content = event.target.value;
+        const content = filter.clean(event.target.value);
         this.setState( () => {
             return{
                 content,
+                valid: content.length <= 200
             };
         });
     }
 
-    handleSubmit(){
-        console.log('Handling submission!')
+    handleSubmit(event){
+        event.preventDefault();
+        if (!this.state.valid){
+            return;
+        }
+        if(this.props.OnSubmit){
+            const newPost = {
+                date: Date.now(),
+                id: Date.now(),
+                content: this.state.content
+            };
+            this.props.OnSubmit(newPost);
+            this.setState({
+                content: '',
+                valid: null
+            });
+        }
     }
 
     render(){
         return (
             <div className='create-post'>
                 <button onClick={this.handleSubmit}>Post</button>
-                <textarea 
-                    value={this.state.content}
+                <textarea
+                    value = {this.state.content}
                     onChange={this.handlePostChange}
                     placeholder="What's on your mind?" />
             </div>

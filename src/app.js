@@ -12,6 +12,8 @@ import Ad from './components/ad/Ad';
 import Post from './components/post/Post';
 import Welcome from './components/welcome/Welcome';
 
+import CreatePost from './components/post/Create';
+
 /**
  * The app component serves as a root for the project and renders either children,
  * the error state, or a loading state
@@ -43,6 +45,24 @@ class App extends Component {
             error: err,
         }));
     }
+
+    //Retrieving post 
+    createNewPost(){
+        return API.createPost(post)
+        .then(res => res.json())
+        .then(newPost =>{
+            this.setState(prevState => {
+                return {
+                    posts: orderBy(prevState.posts.concat(newPost), 'date', 'desc')
+                };
+            });
+        })
+        .catch(err => {
+            this.setState(() => ({error: err}));
+        });
+    }
+
+
     getPosts() {
         API.fetchPosts(this.state.endpoint)
             .then(res => {
@@ -63,6 +83,7 @@ class App extends Component {
             return (
                 <div className="app">
                     <ErrorMessage error={this.state.error} />
+                    <CreatePost onSubmit={this.createNewPost} />
                 </div>
             );
         }
