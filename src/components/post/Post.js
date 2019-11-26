@@ -7,11 +7,12 @@ import Image from "./Image";
 import Link from "./Link";
 import PostActionSection from "./PostActionSection";
 import Comments from "../comment/Comments";
+import DisplayMap from '../map/DisplayMap';
 import UserHeader from "../post/UserHeader";
 import Loader from "../Loader";
 
 export class Post extends Component {
-    static propTypes = {
+    /*static propTypes = {
         post: PropTypes.shape({
             comments: PropTypes.array,
             content: PropTypes.string,
@@ -23,7 +24,11 @@ export class Post extends Component {
             user: PropTypes.object,
             userId: PropTypes.string
         })
+    };*/
+    static propTypes = {
+        post: PropTypes.object,
     };
+
     constructor(props) {
         super(props);
         this.state = {
@@ -54,11 +59,15 @@ export class Post extends Component {
                 <Content post={this.state.post} />
                 <Image post={this.state.post} />
                 <Link link={this.state.post.link} />
+                {
+                    this.state.post.location && <DisplayMap location={this.state.post.location}/>
+                }
                 <PostActionSection showComments={this.state.showComments} />
                 <Comments
                     comments={this.state.comments}
                     show={this.state.showComments}
                     post={this.state.post}
+                    handleSubmit={this.createComment}
                     user={this.props.user}
                 />
             </div>
