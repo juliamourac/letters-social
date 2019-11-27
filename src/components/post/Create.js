@@ -75,7 +75,7 @@ class CreatePost extends Component{
     handleRemoveLocation(){
         this.setState(() => ({
             locationSelected: false,
-            location: this.initialState.location;
+            location: this.initialState.location,
         }));
     }
 
