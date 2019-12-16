@@ -26,11 +26,7 @@ class App extends Component {
         this.state = {
             error: null,
             loading: false,
-            posts: [],
-            endpoint: `${process.env
-                .ENDPOINT}/posts?_page=1&_sort=date&_order=DESC&_embed=comments&_expand=user&_embed=likes`,
         };
-        this.getPosts = this.getPosts.bind(this);
     }
     static propTypes = {
         children: PropTypes.node,
@@ -38,7 +34,8 @@ class App extends Component {
     componentDidMount() {
         this.getPosts();
     }
-    componentDidCatch(err, info) {
+    
+    omponentDidCatch(err, info) {
         console.error(err);
         console.error(info);
         this.setState(() => ({

@@ -13,7 +13,12 @@ export default class Router extends Component {
     constructor(props){
         super(props);
         this.routes = {};
+        this.addRoutes(props.children);
         this.router = enroute(this.routes);
+    }
+
+    addRoutes(routes, parent) {
+        React.Children.forEach(routes, route -> this.addRoute(route, parent));
     }
 
     cleanPath(path){
